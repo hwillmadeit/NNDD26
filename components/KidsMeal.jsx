@@ -127,6 +127,9 @@ const MAINS = [
   { name: "단호박 치킨 카레", icon: Drumstick, cat: "chicken", style: "k", ing: ["닭고기", "단호박", "카레가루", "밥"] },
   { name: "참치마요 덮밥", icon: Fish, cat: "fish", style: "j", ing: ["참치", "마요", "밥"] },
   { name: "두부김치 덮밥", icon: Bean, cat: "tofu", style: "k", ing: ["두부", "김치", "밥"] },
+  { name: "갈치구이 정식", icon: Fish, cat: "fish", style: "k", ing: ["갈치", "밥"] },
+  { name: "낙지볶음 정식", icon: Fish, cat: "fish", style: "k", ing: ["낙지", "애호박", "밥"] },
+  { name: "방어 데리야키 덮밥", icon: Fish, cat: "fish", style: "j", ing: ["방어", "밥"] },
 ];
 const SIDES = [
   { name: "시금치나물", icon: Salad, cat: "veg", style: "k", ing: ["시금치", "참기름"] },
@@ -178,6 +181,10 @@ const SIDES = [
   { name: "오이 스틱", icon: Salad, cat: "veg", style: "*", ing: ["오이"] },
   { name: "로메인 샐러드", icon: Salad, cat: "veg", style: "w", ing: ["양상추", "토마토"] },
   { name: "건새우 달걀볶음", icon: Fish, cat: "egg", style: "k", ing: ["건새우", "계란"] },
+  { name: "두릅나물", icon: Salad, cat: "veg", style: "k", ing: ["두릅"] },
+  { name: "깻잎볶음", icon: Salad, cat: "veg", style: "k", ing: ["깻잎"] },
+  { name: "우엉조림", icon: Carrot, cat: "veg", style: "k", ing: ["우엉", "간장"] },
+  { name: "연근볶음", icon: Carrot, cat: "veg", style: "k", ing: ["연근"] },
 ];
 const SOUPS = [
   { name: "미역국", icon: Soup, cat: "veg", style: "k", ing: ["미역"] },
@@ -229,18 +236,18 @@ const ALLERGENS = [
 ];
 
 const SEASONAL = {
-  1:  { 채소: ["시금치", "봄동", "무", "대파"], 수산물: ["삼치", "굴", "도다리"], 과일: ["귤", "한라봉"] },
-  2:  { 채소: ["시금치", "냉이", "봄동"], 수산물: ["삼치", "굴", "바지락"], 과일: ["딸기", "귤"] },
-  3:  { 채소: ["냉이", "달래", "취나물", "참나물"], 수산물: ["주꾸미", "바지락", "도다리"], 과일: ["딸기"] },
-  4:  { 채소: ["봄동", "달래", "참나물", "고사리"], 수산물: ["주꾸미", "바지락", "멸치"], 과일: ["딸기", "참외"] },
-  5:  { 채소: ["참나물", "취나물", "완두콩", "가지"], 수산물: ["주꾸미", "멸치", "오징어"], 과일: ["딸기", "참외"] },
-  6:  { 채소: ["감자", "애호박", "풋마늘", "양파"], 수산물: ["꽃게", "멸치", "오징어"], 과일: ["참외", "수박", "자두"] },
-  7:  { 채소: ["애호박", "가지", "오이", "옥수수"], 수산물: ["꽃게", "오징어", "전복"], 과일: ["수박", "참외", "블루베리"] },
-  8:  { 채소: ["가지", "오이", "옥수수"], 수산물: ["전어", "대하", "오징어"], 과일: ["포도", "수박", "복숭아"] },
-  9:  { 채소: ["고구마", "버섯", "당근", "단호박"], 수산물: ["전어", "대하", "꽃게"], 과일: ["포도", "사과", "배"] },
-  10: { 채소: ["단호박", "고구마", "버섯", "무"], 수산물: ["대하", "꽃게", "삼치"], 과일: ["사과", "배", "감"] },
-  11: { 채소: ["무", "배추", "단호박", "시금치"], 수산물: ["삼치", "굴", "바지락"], 과일: ["사과", "배", "귤"] },
-  12: { 채소: ["무", "시금치", "배추", "우엉"], 수산물: ["굴", "삼치", "꽁치"], 과일: ["귤", "사과", "한라봉"] },
+  1:  { 채소: ["시금치", "봄동", "우엉", "연근"], 수산물: ["방어", "굴", "삼치", "홍합"],   과일: ["귤", "한라봉", "천혜향"] },
+  2:  { 채소: ["냉이", "봄동", "달래", "시금치"], 수산물: ["삼치", "굴", "바지락", "홍합"], 과일: ["딸기", "귤"] },
+  3:  { 채소: ["냉이", "달래", "취나물", "두릅"],  수산물: ["주꾸미", "바지락", "도다리"],   과일: ["딸기"] },
+  4:  { 채소: ["참나물", "취나물", "고사리", "두릅"],수산물: ["주꾸미", "멸치", "바지락"],    과일: ["딸기", "참외"] },
+  5:  { 채소: ["완두콩", "아스파라거스", "상추", "깻잎"], 수산물: ["전복", "멸치", "주꾸미"], 과일: ["딸기", "참외"] },
+  6:  { 채소: ["감자", "애호박", "오이", "풋콩"],  수산물: ["꽃게", "오징어", "민어"],       과일: ["참외", "수박", "자두"] },
+  7:  { 채소: ["옥수수", "가지", "오이", "깻잎"],  수산물: ["꽃게", "갈치", "오징어"],       과일: ["수박", "복숭아", "블루베리"] },
+  8:  { 채소: ["가지", "깻잎", "옥수수", "풋고추"], 수산물: ["전어", "대하", "갈치"],         과일: ["포도", "복숭아", "무화과"] },
+  9:  { 채소: ["고구마", "버섯", "연근", "가지"],  수산물: ["전어", "대하", "낙지"],          과일: ["포도", "배", "사과"] },
+  10: { 채소: ["단호박", "고구마", "버섯", "연근"], 수산물: ["대하", "낙지", "고등어"],       과일: ["사과", "배", "감"] },
+  11: { 채소: ["무", "연근", "우엉", "시금치"],    수산물: ["굴", "삼치", "고등어"],          과일: ["사과", "배", "유자"] },
+  12: { 채소: ["시금치", "무", "연근", "우엉"],    수산물: ["굴", "방어", "삼치"],             과일: ["귤", "한라봉", "사과"] },
 };
 /* 월별 제철 카드 메타 — 분위기 문구 + 시각 테마 */
 const MONTH_META = {
@@ -269,7 +276,7 @@ function ingCategory(name) {
   if (FRUIT_NAMES.includes(name)) return "과일";
   if (["소고기", "닭고기", "돼지고기", "햄", "스팸", "소시지"].some((m) => name.includes(m))) return "육류";
   if (["고등어", "연어", "새우", "멸치", "어묵", "참치", "미역", "김", "단무지",
-       "꽃게", "대하", "전어", "주꾸미", "굴", "삼치", "바지락", "전복", "진미채"].some((m) => name.includes(m))) return "수산·해조";
+       "꽃게", "대하", "전어", "주꾸미", "굴", "삼치", "바지락", "전복", "진미채", "방어", "갈치", "낙지", "홍합"].some((m) => name.includes(m))) return "수산·해조";
   if (["계란", "메추리알", "우유", "치즈", "요거트", "두유", "바나나우유"].some((m) => name.includes(m))) return "계란·유제품";
   if (["식빵", "빵", "면", "당면", "만두", "시리얼", "누룽지", "그래놀라", "모닝빵"].some((m) => name.includes(m))) return "곡물·빵";
   return "채소";
@@ -304,7 +311,7 @@ const hasEgg = (it) => !!it && (it.cat === "egg" || (it.ing && it.ing.includes("
 const filterPool = (pool, tokens) =>
   !tokens.length ? pool : pool.filter((it) => !tokens.some((t) => it.name.includes(t) || it.ing.some((g) => g.includes(t))));
 
-function scoreItem(it, have, protCount, prevHave, mealHave) {
+function scoreItem(it, have, protCount, prevHave, mealHave, seasonalSet) {
   let nw = 0;
   for (const g of it.ing) {
     if (STAPLES.has(g)) continue;
@@ -312,14 +319,15 @@ function scoreItem(it, have, protCount, prevHave, mealHave) {
   }
   let consecutive = 0;
   if (prevHave) { for (const g of it.ing) { if (!STAPLES.has(g) && prevHave.has(canon(g))) consecutive++; } }
-  // 같은 끼니 내 재료 중복 방지 (두부조림+두부된장국, 감자채볶음+감자국 등)
   let mealOverlap = 0;
   if (mealHave) { for (const g of it.ing) { if (!STAPLES.has(g) && mealHave.has(canon(g))) mealOverlap++; } }
+  // 제철 재료 포함 메뉴 우선 선택 보너스
+  let seasonBonus = 0;
+  if (seasonalSet) { for (const g of it.ing) { if (seasonalSet.has(g)) { seasonBonus = -2.0; break; } } }
   let pen = 0;
   if (it.cat && PROTEIN_CATS.has(it.cat)) { const c = protCount[it.cat] || 0; if (c >= 2) pen += (c - 1) * 2; }
-  // 주간 빈도 제한 재료 (우유, 바나나우유 등)
   for (const g of it.ing) { if (ING_CAPS[g] !== undefined && (protCount[g] || 0) >= ING_CAPS[g]) pen += 5; }
-  return nw + consecutive * 2.5 + mealOverlap * 4.0 + pen;
+  return nw + consecutive * 2.5 + mealOverlap * 4.0 + pen + seasonBonus;
 }
 function register(it, have, protCount) {
   if (!it) return;
@@ -331,7 +339,7 @@ function register(it, have, protCount) {
 }
 
 /* 비용 최소화 선택 */
-function pickBest(pool, seed, avoidCat, noEgg, used, have, protCount, prevHave, mealHave = null) {
+function pickBest(pool, seed, avoidCat, noEgg, used, have, protCount, prevHave, mealHave = null, seasonalSet = null) {
   if (!pool.length) return null;
   const n = pool.length, start = ((seed % n) + n) % n;
   let best = null, bestScore = Infinity;
@@ -341,7 +349,7 @@ function pickBest(pool, seed, avoidCat, noEgg, used, have, protCount, prevHave, 
     if (avoidCat && avoidCat.has(it.cat)) continue;
     if (noEgg && hasEgg(it)) continue;
     if (used.has(it.name)) continue;
-    const sc = scoreItem(it, have, protCount, prevHave, mealHave) + k * 0.001;
+    const sc = scoreItem(it, have, protCount, prevHave, mealHave, seasonalSet) + k * 0.001;
     if (sc < bestScore) { bestScore = sc; best = it; }
   }
   if (best) return best;
@@ -350,7 +358,7 @@ function pickBest(pool, seed, avoidCat, noEgg, used, have, protCount, prevHave, 
   for (let k = 0; k < n; k++) {
     const it = pool[(start + k) % n];
     if (used.has(it.name)) continue;
-    const sc = scoreItem(it, have, protCount, prevHave, mealHave) + k * 0.001;
+    const sc = scoreItem(it, have, protCount, prevHave, mealHave, seasonalSet) + k * 0.001;
     if (sc < bestScore) { bestScore = sc; best = it; }
   }
   if (best) return best;
@@ -379,7 +387,7 @@ function pickAnchor(P, month) {
   return null;
 }
 
-function buildDay(di, seed, bumps, skip, P, used, pin, have, protCount, prevIng, forceAvoid) {
+function buildDay(di, seed, bumps, skip, P, used, pin, have, protCount, prevIng, forceAvoid, seasonalSet = null) {
   // forceAvoid는 이 날에만 적용 — 전역 used를 오염시키지 않기 위해 로컬 복사본 생성
   // 실제 선택된 항목만 전역 used에 추가해 다른 요일에 영향을 주지 않음
   const lBf   = forceAvoid ? new Set(used.bf)   : used.bf;
@@ -403,7 +411,7 @@ function buildDay(di, seed, bumps, skip, P, used, pin, have, protCount, prevIng,
 
   let breakfast = null;
   if (!s.breakfast) {
-    const m = pickBest(P.bf, seed * 2 + di + (bumps.breakfast || 0), null, false, lBf, have, protCount, pBf);
+    const m = pickBest(P.bf, seed * 2 + di + (bumps.breakfast || 0), null, false, lBf, have, protCount, pBf, null, seasonalSet);
     if (m) {
       used.bf.add(m.name); lBf.add(m.name);
       register(m, have, protCount); if (hasEgg(m)) egg = true;
@@ -413,16 +421,16 @@ function buildDay(di, seed, bumps, skip, P, used, pin, have, protCount, prevIng,
 
   let lunch = null;
   if (!s.lunch) {
-    const m = pickBest(P.main, seed * 5 + di * 2 + (bumps.lunch || 0), null, egg, lMain, have, protCount, pL);
+    const m = pickBest(P.main, seed * 5 + di * 2 + (bumps.lunch || 0), null, egg, lMain, have, protCount, pL, null, seasonalSet);
     if (m) {
       used.main.add(m.name); lMain.add(m.name);
       register(m, have, protCount); lunchMainCat = m.cat; if (hasEgg(m)) egg = true;
       // 끼니 내 재료 추적 — 반찬·국에서 동일 재료 중복 방지
       const mealH = new Set(m.ing.filter(g=>!STAPLES.has(g)).map(canon));
-      const sd = pickBest(P.side, seed * 7 + di + (bumps.lunch || 0), new Set([m.cat]), egg, lSide, have, protCount, pL, mealH);
+      const sd = pickBest(P.side, seed * 7 + di + (bumps.lunch || 0), new Set([m.cat]), egg, lSide, have, protCount, pL, mealH, seasonalSet);
       if (sd) { used.side.add(sd.name); lSide.add(sd.name); register(sd, have, protCount); sd.ing.filter(g=>!STAPLES.has(g)).map(canon).forEach(g=>mealH.add(g)); }
       const sp = (soupMeal === 'lunch' && !isLiq(m))
-        ? pickBest(P.soup, seed * 11 + di + (bumps.lunch || 0), new Set([m.cat]), egg, lSoup, have, protCount, pL, mealH)
+        ? pickBest(P.soup, seed * 11 + di + (bumps.lunch || 0), new Set([m.cat]), egg, lSoup, have, protCount, pL, mealH, seasonalSet)
         : null;
       if (sp) { used.soup.add(sp.name); lSoup.add(sp.name); register(sp, have, protCount); }
       if (hasEgg(sd) || hasEgg(sp)) egg = true;
@@ -435,18 +443,18 @@ function buildDay(di, seed, bumps, skip, P, used, pin, have, protCount, prevIng,
     let m, sd, sp;
     if (pin && pin.comp === "main") { m = pin.dish; register(m, have, protCount); }
     else {
-      m = pickBest(P.main, seed * 13 + di * 3 + (bumps.dinner || 0), lunchMainCat ? new Set([lunchMainCat]) : null, egg, lMain, have, protCount, pD);
+      m = pickBest(P.main, seed * 13 + di * 3 + (bumps.dinner || 0), lunchMainCat ? new Set([lunchMainCat]) : null, egg, lMain, have, protCount, pD, null, seasonalSet);
       if (m) { used.main.add(m.name); lMain.add(m.name); register(m, have, protCount); }
     }
     if (m) {
       if (hasEgg(m)) egg = true;
       const mealH = new Set(m.ing.filter(g=>!STAPLES.has(g)).map(canon));
       if (pin && pin.comp === "side") { sd = pin.dish; register(sd, have, protCount); }
-      else { sd = pickBest(P.side, seed * 17 + di + (bumps.dinner || 0), new Set([m.cat]), egg, lSide, have, protCount, pD, mealH); if (sd) { used.side.add(sd.name); lSide.add(sd.name); register(sd, have, protCount); sd.ing.filter(g=>!STAPLES.has(g)).map(canon).forEach(g=>mealH.add(g)); } }
+      else { sd = pickBest(P.side, seed * 17 + di + (bumps.dinner || 0), new Set([m.cat]), egg, lSide, have, protCount, pD, mealH, seasonalSet); if (sd) { used.side.add(sd.name); lSide.add(sd.name); register(sd, have, protCount); sd.ing.filter(g=>!STAPLES.has(g)).map(canon).forEach(g=>mealH.add(g)); } }
       if (pin && pin.comp === "soup") { sp = pin.dish; register(sp, have, protCount); }
       else {
         sp = (soupMeal === 'dinner' && !isLiq(m))
-          ? pickBest(P.soup, seed * 19 + di + (bumps.dinner || 0), new Set([m.cat]), egg, lSoup, have, protCount, pD, mealH)
+          ? pickBest(P.soup, seed * 19 + di + (bumps.dinner || 0), new Set([m.cat]), egg, lSoup, have, protCount, pD, mealH, seasonalSet)
           : null;
         if (sp) { used.soup.add(sp.name); lSoup.add(sp.name); register(sp, have, protCount); }
       }
@@ -474,6 +482,8 @@ function buildWeek(seed, skip, tokens, month) {
     (p.comp === "main" ? used.main : p.comp === "side" ? used.side : used.soup).add(p.d.name);
     p.d.ing.forEach((g) => { if (!STAPLES.has(g)) have.add(canon(g)); });
   });
+  // 이번 달 제철 재료 세트 — 점수 보너스 적용에 사용
+  const seasonalSet = new Set(Object.values(SEASONAL[month] || {}).flat());
   const res = new Array(7);
   const extractIng = (d, slot) => {
     const m = d?.[slot]; if (!m || m.empty) return new Set();
@@ -483,7 +493,7 @@ function buildWeek(seed, skip, tokens, month) {
   };
   let prevIng = null;
   for (let di = 0; di < 7; di++) {
-    res[di] = buildDay(di, seed, {breakfast:0,lunch:0,dinner:0}, skip, P, used, pins[di], have, protCount, prevIng, null);
+    res[di] = buildDay(di, seed, {breakfast:0,lunch:0,dinner:0}, skip, P, used, pins[di], have, protCount, prevIng, null, seasonalSet);
     prevIng = { bf: extractIng(res[di], "breakfast"), lunch: extractIng(res[di], "lunch"), dinner: extractIng(res[di], "dinner") };
   }
   return {
@@ -780,7 +790,8 @@ export default function App() {
       lunch: new Set([...(prevDay.lunch?.main?.ing||[]),...(prevDay.lunch?.side?.ing||[]),...(prevDay.lunch?.soup?.ing||[])].filter(g=>!STAPLES.has(g)).map(canon)),
       dinner: new Set([...(prevDay.dinner?.main?.ing||[]),...(prevDay.dinner?.side?.ing||[]),...(prevDay.dinner?.soup?.ing||[])].filter(g=>!STAPLES.has(g)).map(canon)),
     } : null;
-    const newDay = buildDay(di, rs, { breakfast:0, lunch:0, dinner:0 }, skip, P, used, null, have, protCount, prevIng, null);
+    const seasonalSet = new Set(Object.values(SEASONAL[month] || {}).flat());
+    const newDay = buildDay(di, rs, { breakfast:0, lunch:0, dinner:0 }, skip, P, used, null, have, protCount, prevIng, null, seasonalSet);
     setRollCounts(prev => prev.map((c, i) => i === di ? c + 1 : c));
     setWeekOverrides(prev => prev.map((o, i) => i === di ? newDay : o));
   };
@@ -1126,40 +1137,6 @@ function Week({ info, todayDow, regen, addToCart, isAdded, cycleDayAll }) {
 }
 
 /* ---------------------------- 냉털모드 ---------------------------- */
-/* ── 로컬 냉털: API 없이 재료 기반 메뉴 매칭 ── */
-const RECIPE_TEMPLATES = {
-  볶음밥: { time:"15분", steps:["재료를 잘게 썰어요.","팬에 기름 두르고 단단한 채소부터 볶아요.","밥·계란 넣고 함께 볶아요.","간장 1T, 소금으로 간 맞춰요."], tip:"찬밥으로 하면 더 맛있어요 😊" },
-  덮밥:   { time:"20분", steps:["재료를 먹기 좋게 썰어요.","팬에 기름 두르고 볶아요.","간장·설탕·참기름으로 양념해요.","밥 위에 올려 완성해요."], tip:"간은 살짝 달콤하게 해야 아이가 잘 먹어요 😊" },
-  비빔밥: { time:"20분", steps:["채소를 각각 볶거나 데쳐요.","밥을 그릇에 담아요.","재료를 예쁘게 올려요.","참기름·간장으로 비벼요."], tip:"고추장 대신 간장+참기름을 써요 😊" },
-  파스타: { time:"20분", steps:["파스타를 8-10분 삶아요.","팬에 오일 두르고 재료를 볶아요.","삶은 파스타와 소스를 넣고 섞어요.","파마산 치즈 뿌려 완성해요."], tip:"삶을 때 소금 넣으면 더 맛있어요 😊" },
-  우동:   { time:"10분", steps:["육수를 끓여요.","채소 넣고 한소끔 끓여요.","우동면을 2-3분 익혀요.","간장·소금으로 간 맞춰요."], tip:"국물은 충분히 우려야 맛있어요 😊" },
-  카레:   { time:"25분", steps:["감자·당근을 깍둑썰어요.","팬에 기름 두르고 볶아요.","물 넣고 15분 끓인 뒤 카레루 넣어요.","밥과 함께 내어요."], tip:"아이용은 순한 카레루를 써요 😊" },
-  스테이크:{ time:"15분", steps:["고기를 상온에 꺼내요.","달군 팬에 기름 두르고 굽기 시작해요.","앞뒤 3-4분씩 구워요.","소금·후추로 간해요."], tip:"아이용은 얇게 썰어 주세요 😊" },
-  정식:   { time:"25분", steps:["재료를 손질해요.","메인 재료는 굽거나 조려요.","채소 반찬을 준비해요.","밥과 함께 차려요."], tip:"다양한 색깔이 들어가면 아이가 좋아해요 😊" },
-};
-function matchTpl(name) {
-  for (const [k, t] of Object.entries(RECIPE_TEMPLATES)) { if (name.includes(k)) return t; }
-  return { time:"20분", steps:["재료를 손질해요.","기름 두른 팬에 볶아요.","적당히 양념해요.","그릇에 담아요."], tip:"아이 입맛에 맞게 간을 조절해요 😊" };
-}
-function localFridgeRecommend(userItems) {
-  const uis = userItems.map(g => g.toLowerCase().trim());
-  const scored = MAINS.map(m => {
-    const ns = m.ing.filter(g => !STAPLES.has(g));
-    const matched = ns.filter(g => uis.some(u => g.includes(u) || u.includes(g)));
-    const missing = ns.filter(g => !uis.some(u => g.includes(u) || u.includes(g)));
-    return { m, matched, missing, score: ns.length ? matched.length / ns.length : 0 };
-  }).filter(r => r.score > 0).sort((a,b) => b.score-a.score || a.missing.length-b.missing.length);
-  if (!scored.length) return null;
-  const best = scored[0];
-  const tpl = matchTpl(best.m.name);
-  return {
-    dish: best.m.name, time: tpl.time,
-    description: `보유 재료로 ${Math.round(best.score*100)}% 만들 수 있어요!`,
-    uses: best.matched, extra: best.missing,
-    steps: tpl.steps, tip: tpl.tip,
-  };
-}
-
 const PRESET = ["계란", "밥", "두부", "김치", "감자", "당근", "양파", "애호박", "소고기", "닭고기", "어묵", "치즈"];
 function Fridge({ addToCart }) {
   const [items, setItems] = useState([]);
@@ -1176,26 +1153,22 @@ function Fridge({ addToCart }) {
   async function generate() {
     if (items.length === 0) return;
     setLoading(true); setError(""); setResult(null); setAdded(false);
-    let used = false;
-    // API 키가 있으면 AI 추천, 없으면 자동으로 로컬 매칭 사용
+    const prompt = `너는 아이를 위한 식단을 짜는 따뜻하고 다정한 영양사야.
+부모가 지금 냉장고에 있는 재료를 알려줬어: ${items.join(", ")}
+이 재료를 최대한 활용해서 아이가 잘 먹을 한 끼를 추천해줘. 간은 세게 하지 말고, 탄수화물·단백질·채소가 어우러지게.
+아래 JSON 형식으로만 답해. 마크다운/설명/코드블록 없이 순수 JSON만:
+{"dish":"메뉴 이름","time":"예상 조리시간","description":"한 줄 설명, 아이에게 왜 좋은지 따뜻하게","uses":["실제로 쓰는 보유 재료들"],"extra":["추가로 필요한 흔한 재료, 없으면 빈 배열"],"steps":["1단계","2단계","3단계","4단계"],"tip":"아이가 더 잘 먹게 하는 팁 한 가지"}`;
     try {
-      const prompt = `너는 아이를 위한 식단을 짜는 따뜻하고 다정한 영양사야.\n부모가 지금 냉장고에 있는 재료를 알려줬어: ${items.join(", ")}\n이 재료를 최대한 활용해서 아이가 잘 먹을 한 끼를 추천해줘. 간은 세게 하지 말고, 탄수화물·단백질·채소가 어우러지게.\n아래 JSON 형식으로만 답해. 마크다운/설명/코드블록 없이 순수 JSON만:\n{"dish":"메뉴 이름","time":"예상 조리시간","description":"한 줄 설명","uses":["보유 재료"],"extra":["추가 재료"],"steps":["1단계","2단계","3단계","4단계"],"tip":"팁"}`;
       const res = await fetch("/api/chat", {
         method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ model: "claude-sonnet-4-20250514", max_tokens: 1000, messages: [{ role: "user", content: prompt }] }),
+        body: JSON.stringify({ model: "claude-sonnet-4-20250514", max_tokens: 2000, messages: [{ role: "user", content: prompt }] }),
       });
       const data = await res.json();
-      if (data.code !== "NO_API_KEY" && Array.isArray(data.content)) {
-        const text = data.content.map((b) => (b.type === "text" ? b.text : "")).join("").replace(/```json|```/g, "").trim();
-        setResult(JSON.parse(text)); used = true;
-      }
-    } catch (_) { /* API 연결 불가 → 로컬 매칭으로 자동 전환 */ }
-    if (!used) {
-      const rec = localFridgeRecommend(items);
-      if (rec) setResult(rec);
-      else setError("보유 재료로 만들 수 있는 메뉴를 찾지 못했어요. 재료를 더 추가해보세요.");
-    }
-    setLoading(false);
+      if (data.code === "NO_API_KEY") { setError("no_key"); return; }
+      const text = (data.content || []).map((b) => (b.type === "text" ? b.text : "")).join("").replace(/```json|```/g, "").trim();
+      setResult(JSON.parse(text));
+    } catch (e) { setError("메뉴를 불러오지 못했어요. 잠시 후 다시 시도해 주세요."); }
+    finally { setLoading(false); }
   }
 
   return (
@@ -1212,13 +1185,26 @@ function Fridge({ addToCart }) {
           <span className="mono small-label dim">자주 쓰는 재료</span>
           <div className="preset-row">{PRESET.filter((p) => !items.includes(p)).map((p) => (<button className="preset-chip" key={p} onClick={() => add(p)}>+ {p}</button>))}</div>
         </div>
-        <button className="cook-btn" disabled={items.length === 0 || loading} onClick={generate}>
+        <button className="cook-btn" disabled={items.length === 0 || loading} onClick={() => generate()}>
           {loading ? (<><Loader2 size={16} className="spin" /> 메뉴 고르는 중…</>) : (<>이 재료로 메뉴 추천받기 <ChevronRight size={16} /></>)}
         </button>
       </article>
-      {error && <div className="card err">{error}</div>}
+      {error === "no_key" ? (
+        <article className="card err" style={{textAlign:"center", lineHeight:1.8}}>
+          <p style={{fontSize:22, marginBottom:6}}>🔑</p>
+          <p style={{fontWeight:600, marginBottom:4}}>냉털 기능을 사용하려면 API 키가 필요해요</p>
+          <p style={{fontSize:12.5, color:"#888"}}>Vercel 대시보드 → 프로젝트 → Settings → Environment Variables</p>
+          <p style={{fontSize:12.5, color:"#888"}}>ANTHROPIC_API_KEY 추가 후 재배포해 주세요</p>
+        </article>
+      ) : error ? (
+        <div className="card err">{error}</div>
+      ) : null}
       {result && (
-        <article className="card result">
+        <article className="card result" key={result.dish}>
+          <div className="result-nav">
+            <span className="mono small-label">{idx + 1} / {results.length} 추천</span>
+            <button className="next-btn" onClick={next}>{idx < results.length - 1 ? "다음 메뉴 ›" : "다른 메뉴 추천 ›"}</button>
+          </div>
           <div className="result-head"><div className="dish">{result.dish}</div>{result.time && <span className="mono time-tag">{result.time}</span>}</div>
           {result.description && <p className="note">{result.description}</p>}
           {Array.isArray(result.uses) && result.uses.length > 0 && (<div className="rsec"><span className="mono small-label">있는 재료로</span><div className="ing-list">{result.uses.map((u) => <span className="chip" key={u}>{u}</span>)}</div></div>)}
@@ -1347,29 +1333,29 @@ const CSS = `
 .icon-btn:hover{color:var(--accent); border-color:var(--accent);}
 .badge{position:absolute; top:-6px; right:-6px; min-width:18px; height:18px; padding:0 4px; background:var(--accent); color:#fff; font-size:10px; font-weight:600; border-radius:9px; display:flex; align-items:center; justify-content:center;}
 .tabs{display:flex; gap:4px; border-bottom:1px solid var(--line); margin-bottom:22px;}
-.tab{flex:1; background:none; border:none; cursor:pointer; font-family:inherit; font-size:13.5px; color:var(--ink3); padding:11px 0 13px; display:flex; align-items:center; justify-content:center; gap:6px; border-bottom:1.5px solid transparent; margin-bottom:-1px; transition:.2s;}
+.tab{flex:1; background:none; border:none; cursor:pointer; font-family:inherit; font-size:16px; color:var(--ink3); padding:13px 0 15px; display:flex; align-items:center; justify-content:center; gap:7px; border-bottom:2px solid transparent; margin-bottom:-1px; transition:.2s;}
 .tab svg{opacity:.6;} .tab:hover{color:var(--ink2);}
-.tab.on{color:var(--ink); font-weight:500; border-bottom-color:var(--accent);}
+.tab.on{color:var(--ink); font-weight:600; border-bottom-color:var(--accent);}
 .tab.on svg{opacity:1; color:var(--accent);}
 .main{flex:1; animation:fade .35s ease both;}
-.stack{display:flex; flex-direction:column; gap:13px;}
-.card{background:var(--card); border:1px solid var(--line); border-radius:12px; padding:18px; animation:rise .5s cubic-bezier(.2,.7,.3,1) both;}
+.stack{display:flex; flex-direction:column; gap:14px;}
+.card{background:var(--card); border:1px solid var(--line); border-radius:14px; padding:20px 18px; animation:rise .5s cubic-bezier(.2,.7,.3,1) both;}
 .meal-top{display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;}
 .meal-when{display:flex; align-items:center; gap:8px;}
 .dot{width:7px; height:7px; border-radius:50%; flex:none;} .dot.sm{width:6px;height:6px;}
 .slot-latin{font-size:9px; letter-spacing:.16em; color:var(--ink3);}
-.slot-ko{font-size:13px; color:var(--ink); font-weight:500;}
+.slot-ko{font-size:14px; color:var(--ink); font-weight:600;}
 .slot-time{font-size:10.5px; color:var(--ink3);}
 .meal-btns{display:flex; gap:6px;}
-.chg,.cart-add{display:flex; align-items:center; gap:4px; cursor:pointer; font-family:inherit; font-size:11px; border-radius:20px; padding:5px 10px; transition:.18s; border:1px solid var(--line); background:none; color:var(--ink2);}
+.chg,.cart-add{display:flex; align-items:center; gap:5px; cursor:pointer; font-family:inherit; font-size:12.5px; border-radius:20px; padding:7px 13px; transition:.18s; border:1px solid var(--line); background:none; color:var(--ink2);}
 .chg:hover{color:var(--accent); border-color:var(--accent); background:var(--accent-bg);}
 .cart-add:hover,.cart-add.ok{color:var(--sage); border-color:var(--sage); background:var(--sage-bg);}
 .cart-add.wide{width:100%; justify-content:center; margin-top:16px; padding:11px; font-size:13px;}
 .meal-body{display:flex; flex-direction:column; gap:11px;}
 .food-line{display:flex; align-items:center; gap:11px; animation:fade .4s ease both;}
-.food-ic{width:34px; height:34px; flex:none; border-radius:9px; background:var(--accent-bg); color:var(--accent); display:flex; align-items:center; justify-content:center;}
+.food-ic{width:36px; height:36px; flex:none; border-radius:10px; background:var(--accent-bg); color:var(--accent); display:flex; align-items:center; justify-content:center;}
 .food-label{font-size:10px; color:var(--ink3); width:30px; flex:none;}
-.food-name{font-size:16px; font-weight:500; color:var(--ink);}
+.food-name{font-size:15px; font-weight:500; color:var(--ink); line-height:1.3;}
 .skipped,.empty{display:flex; align-items:center; gap:9px; padding:15px 18px; background:#f1ece0; border-style:dashed;}
 .skip-note{font-size:11.5px; color:var(--ink3); margin-left:auto;}
 .skipped .slot-ko,.empty .slot-ko{color:var(--ink2);}
@@ -1545,6 +1531,8 @@ const CSS = `
 .recipe-steps{padding-left:20px; margin:0; display:flex; flex-direction:column; gap:9px;}
 .recipe-steps li{font-size:13.5px; line-height:1.65; color:#3a3830;}
 .recipe-tip{background:#fffbe8; border:1px solid #ede8b0; border-radius:11px; padding:11px 14px; font-size:13px; color:#7a6a2a; margin-top:4px; line-height:1.55;}
+.result-nav{display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;}
+.next-btn{background:none; border:none; cursor:pointer; font-family:inherit; font-size:12.5px; color:var(--sage); font-weight:600; padding:2px 0;}
 
 /* 오늘 메뉴 편집 패널 */
 .tedit{display:flex; flex-direction:column; max-height:82vh; overflow:hidden; background:#faf8f3; border-radius:18px;}
