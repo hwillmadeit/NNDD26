@@ -1,9 +1,36 @@
 /**
  * 냉털 전용 Gemini API 라우트
- * - 서버에서 프롬프트 생성 (클라이언트 단순화)
- * - 에러 메시지를 클라이언트에 상세 전달 (디버깅 용이)
- * - JSON 추출 로직 강화
+ *
+ * 모델 우선순위:
+ *   1. gemini-2.0-flash        (최신, 무료 15회/분 1500회/일)
+ *   2. gemini-2.0-flash-lite   (더 가벼운 버전, 폴백)
+ *
+ * 환경변수: GEMINI_API_KEY=AIza...
+ * 발급: https://aistudio.google.com → Get API key
  */
+
+const MODELS = [
+  "gemini-2.0-flash",
+  "gemini-2.0-flash-lite",
+  "gemini-1.5-flash-latest",
+];
+
+async function callGemini(apiKey, prompt, model, signal) {
+  const res = await fetch(
+    `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      signal,
+      body: JSON.stringify({
+        contents: [{ parts: [{ text: prompt }] }],
+        generationConfig: { temperature: 1.0, maxOutputTokens: 2048 },
+      }),
+    }
+  );
+  return res.json();
+}
+
 export async function POST(req) {
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) return Response.json({ code: "NO_API_KEY" });
@@ -18,7 +45,7 @@ export async function POST(req) {
   }
 
   const avoidLine = exclude.length
-    ? `\n이미 추천한 메뉴이므로 반드시 제외: ${exclude.join(", ")}`
+    ? `\n이미 추천한 메뉴는 제외: ${exclude.join(", ")}`
     : "";
 
   const prompt =
@@ -34,50 +61,59 @@ export async function POST(req) {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), 9000);
 
+  let lastError = "";
+
   try {
-    const res = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        signal: controller.signal,
-        body: JSON.stringify({
-          contents: [{ parts: [{ text: prompt }] }],
-          generationConfig: { temperature: 1.0, maxOutputTokens: 2048 },
-        }),
+    for (const model of MODELS) {
+      try {
+        const data = await callGemini(apiKey, prompt, model, controller.signal);
+
+        // 모델 없음 → 다음 시도
+        if (data.error?.code === 404) {
+          lastError = `${model}: 404`;
+          continue;
+        }
+        // 기타 에러
+        if (data.error) {
+          return Response.json(
+            { error: `${model}: ${data.error.message} (${data.error.code})` },
+            { status: 500 }
+          );
+        }
+
+        const raw = data.candidates?.[0]?.content?.parts?.[0]?.text ?? "";
+        if (!raw) {
+          lastError = `${model}: 빈 응답`;
+          continue;
+        }
+
+        // JSON 추출
+        const match = raw.match(/\[[\s\S]*\]/);
+        if (!match) {
+          return Response.json(
+            { error: `JSON 추출 실패: ${raw.slice(0, 100)}` },
+            { status: 500 }
+          );
+        }
+
+        return Response.json({ text: match[0], model });
+
+      } catch (e) {
+        if (e.name === "AbortError") throw e;
+        lastError = `${model}: ${e.message}`;
       }
+    }
+
+    // 모든 모델 실패
+    return Response.json(
+      { error: `사용 가능한 모델 없음. 마지막 오류: ${lastError}` },
+      { status: 500 }
     );
-
-    const data = await res.json();
-
-    // Gemini API 자체 오류
-    if (data.error) {
-      return Response.json(
-        { error: `Gemini: ${data.error.message} (${data.error.code})` },
-        { status: 500 }
-      );
-    }
-
-    const raw = data.candidates?.[0]?.content?.parts?.[0]?.text ?? "";
-    if (!raw) {
-      return Response.json({ error: "Gemini 응답이 비어 있어요" }, { status: 500 });
-    }
-
-    // JSON 추출 — 마크다운 코드블록 안팎 모두 처리
-    const match = raw.match(/\[[\s\S]*\]/);
-    if (!match) {
-      return Response.json(
-        { error: `JSON 추출 실패. 원본: ${raw.slice(0, 200)}` },
-        { status: 500 }
-      );
-    }
-
-    return Response.json({ text: match[0] });
 
   } catch (err) {
     const msg = err.name === "AbortError"
-      ? "Gemini 응답 시간 초과 (9초)"
-      : `fetch 오류: ${err.message}`;
+      ? "응답 시간 초과 (9초)"
+      : `오류: ${err.message}`;
     return Response.json({ error: msg }, { status: 502 });
   } finally {
     clearTimeout(timer);
