@@ -1137,6 +1137,45 @@ function Week({ info, todayDow, regen, addToCart, isAdded, cycleDayAll }) {
 }
 
 /* ---------------------------- 냉털모드 ---------------------------- */
+/* 로컬 재료 매칭 (API 없을 때 폴백) */
+const RECIPE_TEMPLATES = {
+  볶음밥:  { time:"15분", steps:["재료를 잘게 썰어요.","팬에 기름 두르고 단단한 채소부터 볶아요.","밥·계란 넣고 함께 볶아요.","간장 1T, 소금으로 간 맞춰요."], tip:"찬밥으로 하면 더 맛있어요 😊" },
+  덮밥:    { time:"20분", steps:["재료를 먹기 좋게 썰어요.","팬에 기름 두르고 볶아요.","간장·설탕·참기름으로 양념해요.","밥 위에 올려 완성해요."], tip:"간은 살짝 달콤하게 해야 아이가 잘 먹어요 😊" },
+  비빔밥:  { time:"20분", steps:["채소를 각각 볶거나 데쳐요.","밥을 그릇에 담아요.","재료를 예쁘게 올려요.","참기름·간장으로 비벼요."], tip:"고추장 대신 간장+참기름을 써요 😊" },
+  파스타:  { time:"20분", steps:["파스타를 8-10분 삶아요.","팬에 오일 두르고 재료를 볶아요.","삶은 파스타와 소스를 넣고 섞어요.","파마산 치즈 뿌려 완성해요."], tip:"삶을 때 소금 넣으면 더 맛있어요 😊" },
+  우동:    { time:"10분", steps:["육수를 끓여요.","채소 넣고 한소끔 끓여요.","우동면을 2-3분 익혀요.","간장·소금으로 간 맞춰요."], tip:"국물은 충분히 우려야 맛있어요 😊" },
+  카레:    { time:"25분", steps:["감자·당근을 깍둑썰어요.","팬에 기름 두르고 볶아요.","물 넣고 15분 끓인 뒤 카레루 넣어요.","밥과 함께 내어요."], tip:"아이용은 순한 카레루를 써요 😊" },
+  스테이크: { time:"15분", steps:["고기를 상온에 꺼내요.","달군 팬에 기름 두르고 굽기 시작해요.","앞뒤 3-4분씩 구워요.","소금·후추로 간해요."], tip:"아이용은 얇게 썰어 주세요 😊" },
+  정식:    { time:"25분", steps:["재료를 손질해요.","메인 재료는 굽거나 조려요.","채소 반찬을 준비해요.","밥과 함께 차려요."], tip:"다양한 색깔이 들어가면 아이가 좋아해요 😊" },
+};
+function matchTpl(name) {
+  for (const [k, t] of Object.entries(RECIPE_TEMPLATES)) { if (name.includes(k)) return t; }
+  return { time:"20분", steps:["재료를 손질해요.","기름 두른 팬에 볶아요.","적당히 양념해요.","그릇에 담아요."], tip:"아이 입맛에 맞게 간을 조절해요 😊" };
+}
+function localFridgeRecommend(userItems, exclude = []) {
+  const uis = userItems.map(g => g.toLowerCase().trim());
+  const excSet = new Set(exclude);
+  const scored = MAINS
+    .filter(m => !excSet.has(m.name))
+    .map(m => {
+      const ns = m.ing.filter(g => !STAPLES.has(g));
+      const matched = ns.filter(g => uis.some(u => g.includes(u) || u.includes(g)));
+      const missing = ns.filter(g => !uis.some(u => g.includes(u) || u.includes(g)));
+      return { m, matched, missing, score: ns.length ? matched.length / ns.length : 0 };
+    })
+    .filter(r => r.score > 0)
+    .sort((a, b) => b.score - a.score || a.missing.length - b.missing.length);
+  return scored.slice(0, 3).map(r => {
+    const tpl = matchTpl(r.m.name);
+    return {
+      dish: r.m.name, time: tpl.time,
+      description: `보유 재료로 ${Math.round(r.score * 100)}% 만들 수 있어요!`,
+      uses: r.matched, extra: r.missing,
+      steps: tpl.steps, tip: tpl.tip,
+    };
+  });
+}
+
 const PRESET = ["계란", "두부", "김치", "감자", "당근", "양파", "애호박", "소고기", "닭고기", "어묵", "치즈", "당면"];
 
 function Fridge({ addToCart }) {
