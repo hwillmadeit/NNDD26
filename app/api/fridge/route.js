@@ -1,35 +1,19 @@
 /**
  * 냉털 전용 Gemini API 라우트
  *
- * 모델 우선순위:
- *   1. gemini-2.0-flash        (최신, 무료 15회/분 1500회/일)
- *   2. gemini-2.0-flash-lite   (더 가벼운 버전, 폴백)
+ * ⚠️  API 키는 반드시 Google AI Studio에서 발급받아야 해요
+ *     → https://aistudio.google.com → Get API key (무료)
+ *     Google Cloud Console 키는 무료 할당량이 0이에요!
  *
- * 환경변수: GEMINI_API_KEY=AIza...
- * 발급: https://aistudio.google.com → Get API key
+ * 모델 자동 폴백: gemini-2.0-flash → gemini-2.0-flash-lite → gemini-1.5-flash-8b
+ * 429/404 오류 시 다음 모델 자동 시도, 전부 실패 시 로컬 매칭으로 조용히 전환
  */
 
 const MODELS = [
   "gemini-2.0-flash",
   "gemini-2.0-flash-lite",
-  "gemini-1.5-flash-latest",
+  "gemini-1.5-flash-8b",
 ];
-
-async function callGemini(apiKey, prompt, model, signal) {
-  const res = await fetch(
-    `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`,
-    {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      signal,
-      body: JSON.stringify({
-        contents: [{ parts: [{ text: prompt }] }],
-        generationConfig: { temperature: 1.0, maxOutputTokens: 2048 },
-      }),
-    }
-  );
-  return res.json();
-}
 
 export async function POST(req) {
   const apiKey = process.env.GEMINI_API_KEY;
@@ -41,7 +25,7 @@ export async function POST(req) {
     ingredients = body.ingredients || [];
     exclude     = body.exclude     || [];
   } catch {
-    return Response.json({ error: "요청 파싱 실패" }, { status: 400 });
+    return Response.json({ code: "NO_API_KEY" }); // 파싱 실패 → 로컬 폴백
   }
 
   const avoidLine = exclude.length
@@ -55,66 +39,59 @@ export async function POST(req) {
     `(예: 볶음밥·파스타·국물요리처럼 장르가 달라야 함)\n` +
     `간은 순하게, 탄수화물·단백질·채소 균형 맞게.` +
     avoidLine +
-    `\n\nJSON 배열 형식으로만 응답해. 마크다운 없이 순수 JSON:\n` +
+    `\n\nJSON 배열 형식으로만 응답해. 마크다운 없이:\n` +
     `[{"dish":"메뉴명","time":"20분","description":"한 줄 설명","uses":["쓴 재료"],"extra":["추가 재료"],"steps":["1단계","2단계","3단계","4단계"],"tip":"팁"}]`;
 
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), 9000);
 
-  let lastError = "";
-
   try {
     for (const model of MODELS) {
+      let data;
       try {
-        const data = await callGemini(apiKey, prompt, model, controller.signal);
-
-        // 모델 없음 → 다음 시도
-        if (data.error?.code === 404) {
-          lastError = `${model}: 404`;
-          continue;
-        }
-        // 기타 에러
-        if (data.error) {
-          return Response.json(
-            { error: `${model}: ${data.error.message} (${data.error.code})` },
-            { status: 500 }
-          );
-        }
-
-        const raw = data.candidates?.[0]?.content?.parts?.[0]?.text ?? "";
-        if (!raw) {
-          lastError = `${model}: 빈 응답`;
-          continue;
-        }
-
-        // JSON 추출
-        const match = raw.match(/\[[\s\S]*\]/);
-        if (!match) {
-          return Response.json(
-            { error: `JSON 추출 실패: ${raw.slice(0, 100)}` },
-            { status: 500 }
-          );
-        }
-
-        return Response.json({ text: match[0], model });
-
+        const res = await fetch(
+          `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            signal: controller.signal,
+            body: JSON.stringify({
+              contents: [{ parts: [{ text: prompt }] }],
+              generationConfig: { temperature: 1.0, maxOutputTokens: 2048 },
+            }),
+          }
+        );
+        data = await res.json();
       } catch (e) {
         if (e.name === "AbortError") throw e;
-        lastError = `${model}: ${e.message}`;
+        continue; // 네트워크 오류 → 다음 모델
       }
+
+      const code = data.error?.code;
+
+      // 404(모델 없음), 429(할당량 초과) → 다음 모델 시도
+      if (code === 404 || code === 429) continue;
+
+      // 기타 API 에러
+      if (data.error) {
+        return Response.json({ error: `${model}: ${data.error.message}` }, { status: 500 });
+      }
+
+      const raw = data.candidates?.[0]?.content?.parts?.[0]?.text ?? "";
+      if (!raw) continue;
+
+      const match = raw.match(/\[[\s\S]*?\]/);
+      if (!match) continue;
+
+      return Response.json({ text: match[0] });
     }
 
-    // 모든 모델 실패
-    return Response.json(
-      { error: `사용 가능한 모델 없음. 마지막 오류: ${lastError}` },
-      { status: 500 }
-    );
+    // 모든 모델 실패 → 로컬 매칭으로 조용히 전환
+    return Response.json({ code: "NO_API_KEY" });
 
   } catch (err) {
-    const msg = err.name === "AbortError"
-      ? "응답 시간 초과 (9초)"
-      : `오류: ${err.message}`;
-    return Response.json({ error: msg }, { status: 502 });
+    // 타임아웃 포함 모든 예외 → 로컬 매칭으로 조용히 전환
+    return Response.json({ code: "NO_API_KEY" });
   } finally {
     clearTimeout(timer);
   }
