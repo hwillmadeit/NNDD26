@@ -1158,65 +1158,49 @@ function Fridge({ addToCart }) {
   async function generate(currentSeen = seen) {
     if (!items.length) return;
     setLoading(true); setError(""); setResults([]); setIdx(0); setAdded(false);
+    let used = false;
 
+    /* ── Gemini API ── */
     try {
-      const avoidLine = currentSeen.length
-        ? `\n이미 추천한 메뉴는 제외: ${currentSeen.join(", ")}`
-        : "";
+      const res  = await fetch("/api/fridge", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ingredients: items, exclude: currentSeen }),
+      });
+      const data = await res.json();
 
-      const prompt =
-        `너는 창의적인 어린이 영양사야. 냉장고 재료: ${items.join(", ")}\n` +
-        `이 재료로 아이가 좋아할 서로 다른 장르의 메뉴 3가지 추천 (볶음밥·파스타·국물처럼 다양하게).` +
-        `간은 순하게, 탄수화물·단백질·채소 균형 맞게.` +
-        avoidLine +
-        `\nJSON 배열만 반환 (마크다운 없이):` +
-        `\n[{"dish":"메뉴명","time":"조리시간","description":"한 줄 설명","uses":["쓰는 재료"],"extra":["추가 재료"],"steps":["1","2","3","4"],"tip":"팁"}]`;
-
-      let used = false;
-
-      /* ── Gemini API ── */
-      try {
-        const res  = await fetch("/api/fridge", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ prompt }),
-        });
-        const data = await res.json();
-
-        if (data.error) throw new Error(data.error);
-
-        if (data.code !== "NO_API_KEY" && data.text) {
-          const parsed = JSON.parse(data.text);
-          const arr    = (Array.isArray(parsed) ? parsed : [parsed]).slice(0, 4);
-          if (arr.length > 0) {
-            setResults(arr);
-            setSeen([...currentSeen, ...arr.map(r => r.dish)]);
-            used = true;
-          }
+      if (data.code === "NO_API_KEY") {
+        // 정상: 키 없음 → 로컬 매칭으로
+      } else if (data.error) {
+        setError("AI 오류: " + data.error);
+      } else if (data.text) {
+        const parsed = JSON.parse(data.text);
+        const arr    = (Array.isArray(parsed) ? parsed : [parsed]).slice(0, 4);
+        if (arr.length > 0) {
+          setResults(arr);
+          setSeen([...currentSeen, ...arr.map(r => r.dish)]);
+          used = true;
         }
-      } catch (apiErr) {
-        console.warn("Gemini API 오류, 로컬 매칭으로 전환:", apiErr);
       }
+    } catch (apiErr) {
+      setError("연결 오류: " + apiErr.message);
+    }
 
-      /* ── 로컬 매칭 폴백 ── */
-      if (!used) {
+    /* ── 로컬 매칭 폴백 ── */
+    if (!used) {
+      try {
         let recs = localFridgeRecommend(items, currentSeen);
         if (!recs.length) { setSeen([]); recs = localFridgeRecommend(items, []); }
         if (recs.length) {
           setResults(recs);
           setSeen(prev => [...new Set([...prev, ...recs.map(r => r.dish)])]);
-        } else {
+        } else if (!error) {
           setError("보유 재료로 만들 수 있는 메뉴를 찾지 못했어요. 재료를 더 추가해보세요.");
         }
-      }
-    } catch (e) {
-      // 예상치 못한 오류도 로딩을 멈추게 함
-      setError("오류가 발생했어요. 다시 시도해주세요.");
-      console.error("generate 오류:", e);
-    } finally {
-      // 반드시 로딩 해제 — try/catch 어디서 끝나도 실행됨
-      setLoading(false);
+      } catch (le) { setError("매칭 오류: " + le.message); }
     }
+
+    setLoading(false);
   }
 
   const next = () => {
